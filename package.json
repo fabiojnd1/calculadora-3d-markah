@@ -5,8 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "serve . -l 3000",
-    "start": "serve . -l 3000",
-    "build": "node -e \"console.log('Build estático pronto para Vercel')\""
+    "start": "serve . -l 3000"
   },
   "keywords": [
     "calculadora",
