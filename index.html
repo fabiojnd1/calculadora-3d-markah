@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light only">
+  <meta name="theme-color" content="#E7E4DD">
+  <title>Calculadora 3D Markah — Custo e Preço de Impressão 3D</title>
+  <meta name="description" content="Calcule com precisão o custo e preço de venda de peças impressas em 3D. Filamento, energia, máquina, falha e margem de lucro.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="brand-wrapper">
+      <h1>
+        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" style="vertical-align:middle">
+          <rect width="64" height="64" rx="14" fill="#16181A"/>
+          <path d="M32 10L52 21.5V44.5L32 56L12 44.5V21.5L32 10Z" stroke="#F4511E" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M32 10L52 21.5L32 33L12 21.5L32 10Z" fill="#F4511E" fill-opacity="0.2" stroke="#F4511E" stroke-width="2"/>
+          <path d="M12 21.5L32 33V56L12 44.5V21.5Z" fill="#14615C" fill-opacity="0.25" stroke="#14615C" stroke-width="2"/>
+          <path d="M52 21.5L32 33V56L52 44.5V21.5Z" fill="#C8B896" fill-opacity="0.25" stroke="#C8B896" stroke-width="2"/>
+          <circle cx="32" cy="33" r="3.5" fill="#F4511E"/>
+        </svg>
+        Calculadora 3D Markah
+      </h1>
+      <span class="brand-badge">Markah</span>
+    </div>
+    <p class="subtitulo">Filamento · energia · máquina · falha · margem</p>
+  </header>
+
+  <main>
+    <div class="bloco" id="blocoEntrada">
+      <p class="rotulo-bloco">Esta impressão</p>
+
+      <div class="campo">
+        <label for="nome">Nome da peça ou projeto</label>
+        <input type="text" id="nome" placeholder="Ex: Suporte de planta Stealth" autocomplete="off">
+      </div>
+
+      <div class="campo">
+        <label for="peso">Peso da peça <span class="ajuda">em gramas</span></label>
+        <input type="text" id="peso" inputmode="decimal" placeholder="120" autocomplete="off">
+      </div>
+
+      <div class="campo">
+        <label for="tempo">Tempo de impressão <span class="ajuda">em horas, igual ao fatiador ou Maker World</span></label>
+        <input type="text" id="tempo" inputmode="decimal" placeholder="Ex: 3,9 ou 3h54" autocomplete="off">
+      </div>
+
+      <div class="campo">
+        <label for="qtd">Quantidade de peças</label>
+        <input type="text" id="qtd" inputmode="numeric" value="1" autocomplete="off">
+      </div>
+
+      <div class="campo">
+        <label>Depreciação da máquina <span class="ajuda">quanto entra nesta peça</span></label>
+        <div class="chips" id="chipsDep">
+          <button type="button" class="chip" data-d="100" aria-pressed="true">100%</button>
+          <button type="button" class="chip" data-d="75">75%</button>
+          <button type="button" class="chip" data-d="50">50%</button>
+          <button type="button" class="chip" data-d="25">25%</button>
+          <button type="button" class="chip" data-d="manual">R$</button>
+        </div>
+        <div id="caixaDep" style="display:none;margin-top:10px">
+          <input type="text" id="depManual" inputmode="decimal" placeholder="valor fixado em reais (ex: 5,00)">
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>Margem de lucro <span class="ajuda">markup sobre o custo</span></label>
+        <div class="chips" id="chipsMargem">
+          <button type="button" class="chip" data-m="50">50%</button>
+          <button type="button" class="chip" data-m="75">75%</button>
+          <button type="button" class="chip" data-m="100" aria-pressed="true">100%</button>
+          <button type="button" class="chip" data-m="outro">outro</button>
+        </div>
+        <div id="caixaOutro" style="display:none;margin-top:10px">
+          <input type="text" id="margemOutro" inputmode="decimal" placeholder="ex: 130">
+        </div>
+      </div>
+
+      <button class="botao" id="calcular" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+          <line x1="8" y1="6" x2="16" y2="6"></line>
+          <line x1="16" y1="14" x2="16" y2="18"></line>
+          <path d="M16 10h.01"></path>
+          <path d="M12 10h.01"></path>
+          <path d="M8 10h.01"></path>
+          <path d="M12 14h.01"></path>
+          <path d="M8 14h.01"></path>
+          <path d="M12 18h.01"></path>
+          <path d="M8 18h.01"></path>
+        </svg>
+        Calcular preço
+      </button>
+
+      <button class="botao secundario" id="btnFoto" type="button" style="margin-top:10px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+          <circle cx="12" cy="13" r="4"></circle>
+        </svg>
+        Ler print do Maker World / Fatiador
+      </button>
+      <input type="file" id="arquivoFoto" accept="image/*">
+      <div class="status" id="statusFoto"></div>
+    </div>
+
+    <!-- Seção de Resultado -->
+    <div id="resultado">
+      <!-- Cabeçalho visível apenas na impressão/PDF -->
+      <div id="folha">
+        <div id="folha-header">
+          <span id="folha-marca">Calculadora 3D Markah</span>
+          <p id="folhaData"></p>
+        </div>
+        <h2 id="folhaNome"></h2>
+      </div>
+
+      <div class="preco">
+        <p class="cap">Preço de venda por peça</p>
+        <p class="valor" id="precoFinal">R$ 0,00</p>
+        <p class="sub" id="linhaLucro"></p>
+        <p class="sub" id="linhaLote"></p>
+      </div>
+
+      <div class="bloco">
+        <p class="rotulo-bloco">Como o preço se forma</p>
+        <div class="pilha" id="pilha"></div>
+        <table id="tabela"></table>
+        <div class="aviso" id="avisoUnitario"></div>
+      </div>
+
+      <div class="bloco acoes">
+        <div class="acoes-grupo">
+          <button class="botao secundario" id="btnPdf" type="button">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9V2h12v7"></path>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            Gerar PDF
+          </button>
+          <button class="botao whatsapp" id="btnWhats" type="button">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            Copiar WhatsApp
+          </button>
+        </div>
+        <button class="botao secundario" id="btnNova" type="button">Nova peça</button>
+      </div>
+    </div>
+
+    <!-- Valores Fixos de Configuração -->
+    <div class="bloco" id="blocoFixos">
+      <details id="fixos">
+        <summary>Meus valores fixos</summary>
+
+        <div class="dupla campo">
+          <div>
+            <label for="precoRolo">Preço do rolo <span class="ajuda">R$</span></label>
+            <input type="text" id="precoRolo" inputmode="decimal">
+          </div>
+          <div>
+            <label for="pesoRolo">Peso do rolo <span class="ajuda">g</span></label>
+            <input type="text" id="pesoRolo" inputmode="decimal">
+          </div>
+        </div>
+
+        <div class="dupla campo">
+          <div>
+            <label for="tarifa">Tarifa kWh <span class="ajuda">R$</span></label>
+            <input type="text" id="tarifa" inputmode="decimal">
+          </div>
+          <div>
+            <label for="potencia">Potência <span class="ajuda">watts</span></label>
+            <input type="text" id="potencia" inputmode="decimal">
+          </div>
+        </div>
+
+        <div class="dupla campo">
+          <div>
+            <label for="valorMaquina">Valor da impressora <span class="ajuda">R$</span></label>
+            <input type="text" id="valorMaquina" inputmode="decimal">
+          </div>
+          <div>
+            <label for="vidaUtil">Vida útil <span class="ajuda">horas</span></label>
+            <input type="text" id="vidaUtil" inputmode="decimal">
+          </div>
+        </div>
+
+        <div class="dupla campo">
+          <div>
+            <label for="embalagem">Embalagem <span class="ajuda">R$ por peça</span></label>
+            <input type="text" id="embalagem" inputmode="decimal">
+          </div>
+          <div>
+            <label for="falha">Taxa de falha <span class="ajuda">%</span></label>
+            <input type="text" id="falha" inputmode="decimal">
+          </div>
+        </div>
+
+        <p class="nota-fixos">Os valores fixos ficam salvos no seu navegador para os próximos cálculos.</p>
+        <div class="status" id="statusFixos"></div>
+      </details>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <footer>
+    <p>Calculadora 3D Markah · Pronto para Vercel</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

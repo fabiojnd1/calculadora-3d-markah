@@ -1,0 +1,25 @@
+{
+  "name": "calculadora-3d-markah",
+  "version": "1.0.0",
+  "description": "Calculadora de custo e preço de venda de impressão 3D para Markah",
+  "main": "index.html",
+  "scripts": {
+    "dev": "serve . -l 3000",
+    "start": "serve . -l 3000",
+    "build": "node -e \"console.log('Build estático pronto para Vercel')\""
+  },
+  "keywords": [
+    "calculadora",
+    "impressao-3d",
+    "markah",
+    "makerworld",
+    "bambu-lab",
+    "orcamento",
+    "3d-printing"
+  ],
+  "author": "Markah",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
